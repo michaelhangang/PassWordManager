@@ -1,0 +1,13 @@
+{
+  "Description": "CIBC online Banking",
+  "UserId": "Michael",
+  "LoginUrl": "https://www.cibconline.cibc.com/ebm-resources/public/banking/cibc/client",
+  "AccountNum": "3213131313",
+  "Password": {
+    "Value": "hafds123",
+    "StrengthNum": 55,
+    "StrengthText": "good"
+
+  }
+
+}

@@ -1,0 +1,12 @@
+{
+  "Description": "Wechat",
+  "UserId": "Owen",
+  "LoginUrl": "https://web.wechat.com/",
+  "AccountNum": "30874658",
+  "Password": {
+    "Value": "Owen8657",
+    "StrengthNum": 76,
+    "StrengthText": "strong"
+  }
+
+}

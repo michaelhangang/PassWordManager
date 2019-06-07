@@ -1,0 +1,13 @@
+{
+  "Description": "GitHub",
+  "UserId": "GangHan",
+  "LoginUrl": "https://github.com/",
+  "AccountNum": "michaelganghan",
+  "Password": {
+    "Value": "1982",
+    "StrengthNum": "42",
+    "StrengthText": "good" 
+  }
+
+}
+
