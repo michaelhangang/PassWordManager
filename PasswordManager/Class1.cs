@@ -8,10 +8,13 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using System.IO;
 
+
 namespace PasswordManager
 {
     public class Class1
     {
+      
+
         static void Main(string[] args)
         {
           //json files path
@@ -74,8 +77,70 @@ namespace PasswordManager
             {
                 Console.WriteLine($"  {i+1}.{lAccouts[i].description}");
             }
-
+            for (int i = 1; i < 120; ++i)  //line
+                Console.Write("-");
+            Console.WriteLine();
+            //inform 
+            Console.WriteLine("  Press # from the above list to select an entry.");         
+            Console.WriteLine("  Press A to add a new entry.");
+            Console.WriteLine("  Press X to quit.");
+           
+            for (int i = 1; i < 120; ++i)  //line
+                Console.Write("-");
+            Console.Write("\n\nEnter a command   ");
+            //get input
+            string input = Console.ReadLine();
+            switch (input)
+            {
+                case "#":
+                    selectEntry(lAccouts);
+                    break;
+                case "A":
+                    break;
+                case "X":
+                    break;
+            }
 
         }
-    }
+
+        public static void selectEntry(List<Account> lAccouts)
+        {
+            bool flag; ;
+            do
+            {
+                flag = false;
+                Console.Write("\nplease enter a number of the Account ");
+                string numSeleted = Console.ReadLine();
+                int index = int.Parse(numSeleted);
+                if (index <= 0 || index > lAccouts.Count)
+                {
+                    Console.WriteLine("\nSorry, the number is invalid, please try again");
+                    flag = true;
+                }
+                else
+                {
+                    showAccout(index,lAccouts);
+                }
+            } while (flag);
+           
+        }
+
+        public static void showAccout(int index, List<Account> listAcct)
+        {
+            Account accout = listAcct[index - 1];
+            for (int i = 1; i < 120; ++i)  //line
+                Console.Write("-");
+            Console.WriteLine();
+            Console.WriteLine($"  {index}. {accout.description}");
+            for (int i = 1; i < 120; ++i)  //line
+                Console.Write("-");
+            Console.WriteLine("\n {0,-25} {1,-25}", "User ID:", accout.userId);
+            Console.WriteLine("\n {0,-25} {1,-25}", "Password:", accout.password.value);
+            Console.WriteLine("\n {0,-25} {1,-25}", "Password Strength:", accout.password.strengthText + "(" + accout.password.strengthNum + "%)");
+            Console.WriteLine("\n {0,-25} {1,-25}", "Password Reset:", accout.password.lastReset);
+            Console.WriteLine("\n {0,-25} {1,-25}", "Login url", accout.loginUrl);
+            Console.WriteLine("\n {0,-25} {1,-25}", "Account #", accout.accountNum);
+
+            }
+        }
 }
