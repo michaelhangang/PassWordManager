@@ -13,7 +13,7 @@ namespace PasswordManager
 {
     public class Class1
     {
-      
+
 
         static void Main(string[] args)
         {
@@ -22,23 +22,23 @@ namespace PasswordManager
             string path2 = @"E:\\Level 4\\INFO3138 Declarative Language\\Project1\\PasswordManager\\PasswordManager\\account-data 2.json";
             string path3 = @"E:\\Level 4\\INFO3138 Declarative Language\\Project1\\PasswordManager\\PasswordManager\\account-data 3.json";
             string path4 = @"E:\\Level 4\\INFO3138 Declarative Language\\Project1\\PasswordManager\\PasswordManager\\account-schema.json";
-           
+
             //variables
             Account acc1 = new Account(), acc2 = new Account(), acc3 = new Account();
             List<Account> lAccouts = new List<Account>();//store accouts
 
             //creat an account object by reading a json file  and add it to the accounts list
             try
-            {             
-                    acc1 = getAccountFromFile(path1);
-                    lAccouts.Add(acc1);
-               
-                    acc2 = getAccountFromFile(path2);
-                    lAccouts.Add(acc2);
-            
-                    acc3 = getAccountFromFile(path3);
-                    lAccouts.Add(acc3);
-               
+            {
+                acc1 = getAccountFromFile(path1);
+                lAccouts.Add(acc1);
+
+                acc2 = getAccountFromFile(path2);
+                lAccouts.Add(acc2);
+
+                acc3 = getAccountFromFile(path3);
+                lAccouts.Add(acc3);
+
             }
             catch (IOException)
             {
@@ -95,7 +95,7 @@ namespace PasswordManager
                     case "A":
                         //creat json schema
                         try
-                        {                          
+                        {
                             string jsSchema = File.ReadAllText(path4);
                             JSchema schema = JSchema.Parse(jsSchema);
                             addAccount(schema, lAccouts);//add an account 
@@ -125,7 +125,7 @@ namespace PasswordManager
 
         public static Account getAccountFromFile(string path)
         {
-            string  accout = File.ReadAllText(path);
+            string accout = File.ReadAllText(path);
             return JsonConvert.DeserializeObject<Account>(accout);
         }
 
@@ -153,10 +153,10 @@ namespace PasswordManager
                 }
                 else
                 {
-                    showAccout(index,lAccouts);
+                    showAccout(index, lAccouts);
                 }
             } while (flag);
-           
+
         }
 
         //show account's information that a user seleted 
@@ -172,7 +172,7 @@ namespace PasswordManager
             Console.WriteLine(" {0,-25} {1,-25}", "Password Reset:", accout.Password.LastReset);
             Console.WriteLine(" {0,-25} {1,-25}", "Login url", accout.LoginUrl);
             Console.WriteLine(" {0,-25} {1,-25}", "Account #", accout.AccountNum);
-            }
+        }
 
         //update an account information
         public static void updateAccout(int index, List<Account> listAcct)
@@ -181,8 +181,8 @@ namespace PasswordManager
             string com = Console.ReadLine();
             switch (com)
             {
-                case "P":                
-                    changePassword(index, listAcct);         
+                case "P":
+                    changePassword(index, listAcct);
                     break;
                 case "D":
                     deleteAccount(index, listAcct);
@@ -197,18 +197,18 @@ namespace PasswordManager
         //change the password 
         public static void changePassword(int index, List<Account> listAcct)
         {
-            Account acc = listAcct[index-1];
+            Account acc = listAcct[index - 1];
             Console.Write("new password: ");
             string newPassword = Console.ReadLine();
-           
-                // PasswordTester class demonstration
-                DateTime dateNow = DateTime.Now;
-                PasswordTester pw = new PasswordTester(newPassword);
-                acc.Password.Value = newPassword;
-                acc.Password.StrengthText =pw.StrengthLabel;
-                acc.Password.StrengthNum=   pw.StrengthPercent;
-                acc.Password.LastReset = dateNow.ToShortDateString();
-            
+
+            // PasswordTester class demonstration
+            DateTime dateNow = DateTime.Now;
+            PasswordTester pw = new PasswordTester(newPassword);
+            acc.Password.Value = newPassword;
+            acc.Password.StrengthText = pw.StrengthLabel;
+            acc.Password.StrengthNum = pw.StrengthPercent;
+            acc.Password.LastReset = dateNow.ToShortDateString();
+
         }
 
         //delete the account
@@ -216,12 +216,12 @@ namespace PasswordManager
         {
             Console.Write("Delete? (Y/N): ");
             string com = Console.ReadLine();
-            if(com =="Y")
-            listAcct.RemoveAt(index-1);
+            if (com == "Y")
+                listAcct.RemoveAt(index - 1);
         }
 
         //add the account 
-        public static void addAccount(JSchema schema,List<Account> lAccouts)
+        public static void addAccount(JSchema schema, List<Account> lAccouts)
         {
             bool flagAddNew;
             do
@@ -256,11 +256,12 @@ namespace PasswordManager
                 {
                     lAccouts.Add(newAcc);
                     string path = newAcc.Description + ".json";
-                    using (File.Create(path)) { } 
-                    using (StreamWriter sWriter = new StreamWriter(path)) {
+                    using (File.Create(path)) { }
+                    using (StreamWriter sWriter = new StreamWriter(path))
+                    {
                         sWriter.WriteLine(nAcc);
-                    } 
-                  
+                    }
+
                 }
             } while (flagAddNew);//end while
 
