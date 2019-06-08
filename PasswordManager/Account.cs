@@ -9,36 +9,36 @@ namespace PasswordManager
 {
     public class Password{
 
-        public string value;
-        public ushort strengthNum;
-        public string strengthText;
-        public string lastReset;
+        public string Value;
+        public ushort StrengthNum;
+        public string StrengthText;
+        public string LastReset;
 
         public Password()
         {
-            this.value = "";
-            this.strengthNum = 0;
-            this.strengthText = "";
-            this.lastReset = "";
+            this.Value = "";
+            this.StrengthNum = 0;
+            this.StrengthText = "";
+            this.LastReset = "";
         }
 
     }
    public class Account
     {
-        public string description;
-        public string userId;
-        public string loginUrl;
-        public string accountNum;
-        public Password password;
+        public string Description;
+        public string UserId;
+        public string LoginUrl;
+        public string AccountNum;
+        public Password Password;
        
 
         public Account()
         {
-            this.description = "";
-            this.userId = "";
-            this.loginUrl = "";
-            this.accountNum = "";
-            this.password = new Password();
+            this.Description = "";
+            this.UserId = "";
+            this.LoginUrl = "";
+            this.AccountNum = "";
+            this.Password = new Password();
          
         }
 

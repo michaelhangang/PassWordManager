@@ -1,0 +1,12 @@
+{
+  "Description": "michael",
+  "UserId": "A",
+  "LoginUrl": "http://qq.com",
+  "AccountNum": "",
+  "Password": {
+    "Value": "hadhdh",
+    "StrengthNum": 15,
+    "StrengthText": "very weak",
+    "LastReset": ""
+  }
+}
