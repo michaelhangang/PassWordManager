@@ -17,47 +17,45 @@ namespace PasswordManager
 
         static void Main(string[] args)
         {
-          //json files path
+            //json files path
             string path1 = @"E:\\Level 4\\INFO3138 Declarative Language\\Project1\\PasswordManager\\PasswordManager\\account-data 1.json";
             string path2 = @"E:\\Level 4\\INFO3138 Declarative Language\\Project1\\PasswordManager\\PasswordManager\\account-data 2.json";
             string path3 = @"E:\\Level 4\\INFO3138 Declarative Language\\Project1\\PasswordManager\\PasswordManager\\account-data 3.json";
             string path4 = @"E:\\Level 4\\INFO3138 Declarative Language\\Project1\\PasswordManager\\PasswordManager\\account-schema.json";
-         //variable
-            string accout1="", accout2="", accout3="";
+           
+            //variables
             Account acc1 = new Account(), acc2 = new Account(), acc3 = new Account();
-            List<Account> lAccouts = new List<Account>();
+            List<Account> lAccouts = new List<Account>();//store accouts
 
-            //check if files exist
-            if (File.Exists(path1))
-            {
-                //Console.WriteLine("json file exists");
-                accout1 = File.ReadAllText(path1);
-                acc1 = JsonConvert.DeserializeObject<Account>(accout1);
-                lAccouts.Add(acc1);
+            //creat an account object by reading a json file  and add it to the accounts list
+            try
+            {             
+                    acc1 = getAccountFromFile(path1);
+                    lAccouts.Add(acc1);
+               
+                    acc2 = getAccountFromFile(path2);
+                    lAccouts.Add(acc2);
+            
+                    acc3 = getAccountFromFile(path3);
+                    lAccouts.Add(acc3);
+               
             }
-            if (File.Exists(path2))
+            catch (IOException)
             {
-                //Console.WriteLine("json file exists");
-                accout2 = File.ReadAllText(path2);
-                acc2 = JsonConvert.DeserializeObject<Account>(accout2);
-                lAccouts.Add(acc2);
-
+                Console.WriteLine("ERROR: Can not read the JSON data file.");
             }
-            if (File.Exists(path1))
+            catch (JsonSerializationException)
             {
-                //Console.WriteLine("json file exists");
-                accout3 = File.ReadAllText(path3);
-                acc3 = JsonConvert.DeserializeObject<Account>(accout3);
-                lAccouts.Add(acc3);
+                Console.WriteLine("ERROR: Can not convert the JSON data to an account object.");
             }
 
-         
+
             //head format
             bool returnAccEntries = true;
             Console.WriteLine("PASSWORD MANAGEMENT SYSTEM\n");
             while (returnAccEntries)
             {
-                setLine();
+                setLine();//draw a line
                 Console.WriteLine("\t\t\t\t\tAccount Entries");
                 setLine();
                 //create menu
@@ -66,7 +64,7 @@ namespace PasswordManager
                     Console.WriteLine($"  {i + 1}.{lAccouts[i].Description}");
                 }
                 setLine();
-                //inform 
+                //prompt user to enter an order
                 Console.WriteLine("  Press # from the above list to select an entry.");
                 Console.WriteLine("  Press A to add a new entry.");
                 Console.WriteLine("  Press X to quit.");
@@ -85,13 +83,35 @@ namespace PasswordManager
                                           "  Press D to delete this entry.\n" +
                                           "  Press M to return to the main menu.");
                         setLine();
-                        updateAccout(index, lAccouts);
+                        try
+                        {
+                            updateAccout(index, lAccouts);//update an account: change password or delete
+                        }
+                        catch (ArgumentException)
+                        {
+                            Console.WriteLine("ERROR: Invalid password format");
+                        }
                         break;
                     case "A":
                         //creat json schema
-                        string jsSchema = File.ReadAllText(path4);
-                        JSchema schema = JSchema.Parse(jsSchema);
-                        addAccount(schema, lAccouts);
+                        try
+                        {                          
+                            string jsSchema = File.ReadAllText(path4);
+                            JSchema schema = JSchema.Parse(jsSchema);
+                            addAccount(schema, lAccouts);//add an account 
+                        }
+                        catch (IOException)
+                        {
+                            Console.WriteLine("ERROR: Can not read the JSON data file.");
+                        }
+                        catch (JsonSerializationException)
+                        {
+                            Console.WriteLine("ERROR: Can not convert a account objectthe to string data.");
+                        }
+                        catch (JSchemaReaderException)
+                        {
+                            Console.WriteLine("ERROR: Can not read a Json Schema.");
+                        }
                         break;
                     case "X":
                         returnAccEntries = false;
@@ -99,14 +119,15 @@ namespace PasswordManager
                     default:
                         break;
                 }
-            }// end switch
-          
-           
+            }// end while
+
         }//end main
-          
 
-
-
+        public static Account getAccountFromFile(string path)
+        {
+            string  accout = File.ReadAllText(path);
+            return JsonConvert.DeserializeObject<Account>(accout);
+        }
 
         public static void setLine()
         {
@@ -114,6 +135,8 @@ namespace PasswordManager
                 Console.Write("-");
             Console.WriteLine();
         }
+
+        //get a user's input number and validate it
         public static void selectEntry(ref int index, List<Account> lAccouts)
         {
             bool flag; ;
@@ -136,6 +159,7 @@ namespace PasswordManager
            
         }
 
+        //show account's information that a user seleted 
         public static void showAccout(int index, List<Account> listAcct)
         {
             Account accout = listAcct[index - 1];
@@ -150,17 +174,18 @@ namespace PasswordManager
             Console.WriteLine(" {0,-25} {1,-25}", "Account #", accout.AccountNum);
             }
 
+        //update an account information
         public static void updateAccout(int index, List<Account> listAcct)
         {
             Console.Write("Enter a command: ");
             string com = Console.ReadLine();
             switch (com)
             {
-                case "P":
-                    changePassword(index,listAcct);
+                case "P":                
+                    changePassword(index, listAcct);         
                     break;
                 case "D":
-                    deletePassword(index, listAcct);
+                    deleteAccount(index, listAcct);
                     break;
                 case "M":
                     break;
@@ -169,13 +194,13 @@ namespace PasswordManager
             }
         }
 
+        //change the password 
         public static void changePassword(int index, List<Account> listAcct)
         {
             Account acc = listAcct[index-1];
             Console.Write("new password: ");
             string newPassword = Console.ReadLine();
-            try
-            {
+           
                 // PasswordTester class demonstration
                 DateTime dateNow = DateTime.Now;
                 PasswordTester pw = new PasswordTester(newPassword);
@@ -183,14 +208,11 @@ namespace PasswordManager
                 acc.Password.StrengthText =pw.StrengthLabel;
                 acc.Password.StrengthNum=   pw.StrengthPercent;
                 acc.Password.LastReset = dateNow.ToShortDateString();
-            }
-            catch (ArgumentException)
-            {
-                Console.WriteLine("ERROR: Invalid password format");
-            }
+            
         }
 
-        public static void deletePassword(int index, List<Account> listAcct)
+        //delete the account
+        public static void deleteAccount(int index, List<Account> listAcct)
         {
             Console.Write("Delete? (Y/N): ");
             string com = Console.ReadLine();
@@ -198,6 +220,7 @@ namespace PasswordManager
             listAcct.RemoveAt(index-1);
         }
 
+        //add the account 
         public static void addAccount(JSchema schema,List<Account> lAccouts)
         {
             bool flagAddNew;
@@ -222,8 +245,8 @@ namespace PasswordManager
 
                 string nAcc = JsonConvert.SerializeObject(newAcc);
                 JObject JnewAcc = JObject.Parse(nAcc);
-              
 
+                //use schema to validate the Json data of the account that user added
                 if (!JnewAcc.IsValid(schema))
                 {
                     Console.WriteLine("ERROR: Invalid account information entered. Please try again.");
